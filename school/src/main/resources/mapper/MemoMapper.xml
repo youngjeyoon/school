@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.mapper.MemoMapper">
+	<select id="send" resultType="com.example.demo.dto.MemoDto">
+		select * from memo
+		where seUserid=#{userid}
+		order by id desc
+	</select>
+
+	<select id="getUserid" resultType="HashMap">
+		select userid,name from teacher
+		order by name asc
+	</select>
+
+	<insert id="memoWriteOk"
+		parameterType="com.example.demo.dto.MemoDto">
+		insert into memo(title,content,ofname,sfname,seUserid,reUserid,writeday)
+		values(#{title},#{content},#{ofname},#{sfname},#{seUserid},#{reUserid},now())
+	</insert>
+
+	<select id="receive" resultType="com.example.demo.dto.MemoDto">
+		select * from memo
+		where reUserid=#{userid}
+		order by id desc
+	</select>
+
+	<update id="setState">
+		update memo
+		set state=1
+		where id=#{id}
+	</update>
+
+	<select id="viewContent" resultType="String">
+		select content
+		from memo
+		where id=#{id}
+	</select>
+
+	<select id="cntMemo" resultType="String">
+		select count(*)
+		from memo
+		where reUserid=#{userid}
+		and state=0
+	</select>
+</mapper>
+
+
+
+
+

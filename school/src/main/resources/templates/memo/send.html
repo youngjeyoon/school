@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="/default">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<style>
+section {
+	width: 1100px;
+	height: 600px;
+	margin: auto;
+	position: relative;
+}
+
+section {
+	width: 1100px;
+	height: 600px;
+	margin: auto;
+}
+
+section table {
+	border-spacing: 0px;
+}
+
+section table tr td {
+	height: 35px;
+	border-bottom: 1px solid #dddddd;
+}
+
+section table tr:first-child td {
+	border-top: 2px solid #dddddd;
+}
+
+section table tr:last-child td {
+	border-bottom: 2px solid #dddddd;
+}
+
+section #viewCon {
+	width: 300px;
+	height: 200px;
+	border: 1px solid green;
+	padding: 3px;
+	position: absolute;
+	left: 400px;
+	top: 100px;
+	background: white;
+	visibility: hidden;
+}
+
+section #viewCon #content {
+	width: 280px;
+	height: 170px;
+	overflow: auto;
+}
+
+section #viewCon input[type=button] {
+	width: 80px;
+	height: 28px;
+}
+
+section #memo {
+	width: 300px;
+	height: 350px;
+	position: absolute;
+	left: 400px;
+	top: 100px;
+	visibility: hidden;
+	border: 1px solid green;
+	padding: 3px;
+	background: white;
+}
+
+section #memo div {
+	margin-top: 10px;
+	text-align: center;
+}
+
+section #memo input[type=text] {
+	width: 280px;
+	height: 30px;
+}
+
+section #memo textarea {
+	width: 280px;
+	height: 80px;
+}
+
+section #memo select {
+	width: 288px;
+	height: 34px;
+}
+
+section #memo input[type=submit] {
+	width: 288px;
+	height: 34px;
+	background: green;
+	color: white;
+	border: 1px solid green;
+}
+
+section #memo input[type=button] {
+	width: 288px;
+	height: 34px;
+	color: red;
+	background: #eeeeee;
+	border: 1px solid #eeeeee;
+}
+</style>
+<script>
+  function memoWrite(userid) {   
+	  
+	  // 메모 입력폼을 보이게 하기
+	  document.getElementById("memo").style.visibility="visible";
+	  
+	  // 받는 사람의 아이디,이름을 가져오기
+	  var chk=new XMLHttpRequest();
+	  chk.onload=function() {
+		  //alert(chk.responseText);
+		  var mapAll=JSON.parse(chk.responseText);
+		  
+		  document.getElementById("reUserid").options.length=mapAll.length;
+		  var i=0;
+		  for(map of mapAll) {
+			  document.getElementById("reUserid").options[i].value=map.userid;
+			  document.getElementById("reUserid").options[i].text=map.name;
+			  
+			  i++;
+		  }	  
+		  
+		  // 아이디가 넘어왔으면(아이디가 클릭된경우)
+		  if(userid!=null) {	  
+			document.getElementById("reUserid").value=userid;
+ 		  }
+	  }
+	  chk.open("get","getUserid");
+	  chk.send();
+  }
+  
+  function check(form) {
+	  if(form.title.value=="") {
+		  alert("제목이 없습니다");
+		  form.title.focus();
+		  return false;
+	  }	  
+	  else if(form.content.value=="") {
+		       alert("내용이 없습니다");
+		       form.content.focus();
+		       return false;
+		   }
+	       else 
+	    	   return true;
+  }
+ </script>
+</head>
+<body> <!-- send.html -->
+  <section layout:fragment="content">
+    <div id="memo">
+      <form method="post" onsubmit="return check(this)" action="memoWriteOk" enctype="multipart/form-data">
+        <div> 메모 보내기 </div>
+        <div> 
+          <select name="reUserid" id="reUserid">
+            
+          </select>
+        </div>
+        <div> <input type="text" name="title"> </div>
+        <div> <textarea name="content"></textarea></div>
+        <div> <input type="file" name="file"> </div>
+        <div> <input type="submit" value="보내기"> </div>
+        <div> <input type="button" onclick="this.parentNode.parentNode.parentNode.style.visibility='hidden'" value="닫기"> </div>
+      </form>
+    </div>
+    <table width="900" align="center">
+      <caption> 
+          <h3> 보낸 메모 
+          <a href="javascript:memoWrite()" style="font-size:13px;">메모보내기</a> 
+          </h3>
+      </caption>
+      <tr align="center">
+        <td> 받는 사람 </td>
+        <td> 제 목 </td>
+        <td> 첨부파일 </td>
+        <td> 보낸 날짜 </td>
+        <td> 읽기여부 </td>
+      </tr>
+      
+      <tr th:each="mdto:${mlist}" align="center">
+        <td th:text="${mdto.reUserid}" th:onclick="memoWrite('[(${mdto.reUserid})]')"></td>
+        <td th:onclick="viewContent([[${mdto.id}]])" th:text="${mdto.title}"></td>
+        <td> <a th:href="@{down(sfname=${mdto.sfname},ofname=${mdto.ofname})}" th:text="${mdto.ofname}"></a> </td>
+        <td th:text="${mdto.writeday}"></td>
+        <td th:text="읽지않음" th:if="${mdto.state==0}"></td>
+        <td th:text="읽음" th:unless="${mdto.state==0}"></td>
+      </tr>
+      
+    </table>
+    
+    <div id="viewCon">
+      <div id="content"></div>
+      <div align="center"> <input type="button" onclick="hideView()" value="닫기"> </div>
+    </div>
+    
+    <script>
+      function hideView() {
+    	  document.getElementById("viewCon").style.visibility="hidden";
+    	  document.getElementById("content").innerHTML="";
+      }
+      function viewContent(id) {
+    	  var chk=new XMLHttpRequest();
+    	  chk.onload=function() {
+    		  // alert(chk.responseText);
+    		  document.getElementById("content").innerHTML=chk.responseText;
+    		  document.getElementById("viewCon").style.visibility="visible";
+    		  
+    	  } // 보낸메모의 내용을 보기
+    	  chk.open("get","viewContent?ck=1&id="+id);
+    	  chk.send();
+      }
+    </script>
+  </section>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+

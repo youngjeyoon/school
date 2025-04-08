@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="/default">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+ <style>
+   section {
+     width:1100px;
+     height:600px;
+     margin:auto;    
+     position:relative; 
+   }
+   section table {
+     border-spacing:0px;
+   }
+   section table tr td {
+     height:35px;
+     border-bottom:1px solid #dddddd;
+   }
+   section table tr:first-child td {
+     border-top:2px solid #dddddd;
+   }
+   section table tr:last-child td {
+     border-bottom:2px solid  #dddddd;
+   }
+   section a {
+     text-decoration:none;
+     color:black;
+   }
+   section #updateForm {
+     width:330px;
+     height:225px;
+     position:absolute;
+     left:400px;
+     top:100px;
+     visibility:hidden;
+     border:1px solid green;
+     background:white;
+   }
+   section #updateForm div {
+     margin-top:10px;
+     text-align:center;
+   }
+   section #updateForm input[type=text] {
+     width:300px;
+     height:28px;
+   }
+   section #updateForm input[type=submit] {
+     width:306px;
+     height:34px;
+     background:green;
+     border:1px solid green;
+     color:white;
+   }
+   section #updateForm input[type=button] {
+     width:306px;
+     height:34px;
+     background:white;
+     border:1px solid green;
+     color:green;
+   }
+   section #updateForm select {
+     width:99px;
+     height:28px;
+   }
+ </style>
+ <script>
+   function viewForm(id,name,phone,birth)
+   {
+	   document.getElementById("updateForm").style.visibility="visible";
+	   
+	   document.uform.name.value=name;
+	   document.uform.phone.value=phone;
+	   document.uform.id.value=id;
+	   
+	   // 날짜는 '-'를 기준으로 자르기 => 월,일에는 0의 값을 없애기 위해 정수로 변환
+	   var imsi=birth.split("-");
+	   document.uform.year.value=imsi[0]; // 년
+	   document.uform.month.value=parseInt(imsi[1]); // 월
+	   document.uform.day.value=parseInt(imsi[2]); // 일
+   }
+   function hideForm()
+   {
+	   document.getElementById("updateForm").style.visibility="hidden";
+   }
+   function check(form)
+   {
+	   var year=form.year.value;
+	   var month=form.month.value;
+	   var day=form.day.value;
+	   
+	   var birth=year+"-"+month+"-"+day; // 이 값을 폼태그에 hidden에 넣어준다
+	   form.birth.value=birth;
+	   
+	   return true;
+   }
+   
+   function studentDel(id,ban)
+   {
+	   location="studentDel?id="+id+"&ban="+ban;
+   }
+ </script>
+</head>
+<body> <!-- studentList.html -->
+  <section layout:fragment="content">
+    <div id="updateForm">
+      <form name="uform" method="post" onsubmit="return check(this)" action="studentUpdateOk">
+        <input type="hidden" name="birth">
+        <input type="hidden" name="id"> <!-- 수정을 위해 id값이 필요 -->
+        <input type="hidden" name="ban" th:value="${ban}"> <!-- 수정후 studentList에 갈때 필요 -->
+        <div> <input type="text" name="name"> </div>
+        <div> <input type="text" name="phone"> </div>
+        <div> 
+          <select name="year">
+            <th:block th:each="i:${#numbers.sequence(2025,2000,-1)}">
+              <option th:value="${i}" th:text="${i}"></option>
+            </th:block>
+          </select>
+          <select name="month">
+            <th:block th:each="i:${#numbers.sequence(1,12,1)}">
+              <option th:value="${i}" th:text="${i}"></option>
+            </th:block>
+          </select>
+          <select name="day">
+            <th:block th:each="i:${#numbers.sequence(1,31,1)}">
+              <option th:value="${i}" th:text="${i}"></option>
+            </th:block>
+          </select>
+        </div>
+        <div> <input type="submit" value="수정하기"> </div>
+        <div> <input type="button" value="닫기" onclick="hideForm()"> </div>
+      </form>
+    </div>
+    <table width="800" align="center">
+      <caption>
+         <h3>
+           <span th:text="${ban+'반 학생정보'}"></span>
+           <a th:href="@{studentAdd(ban=${ban})}" style="font-size:13px;"> 학생 추가 </a> 
+         </h3>
+      </caption>
+      <tr align="center">
+        <td> 번호 </td>
+        <td> 이름 </td>
+        <td> 전화번호 </td>
+        <td> 생년월일 </td>
+        <td> 삭제 </td>
+      </tr>
+      <tr th:each="sdto:${slist}" align="center">
+        <td th:text="${sdto.bunho}"></td>
+        <td th:text="${sdto.name}" th:onclick="viewForm([(${sdto.id})],'[(${sdto.name})]','[(${sdto.phone})]','[(${sdto.birth})]')"></td>
+        <td th:text="${sdto.phone}"></td>
+        <td th:text="${sdto.birth}"></td>
+        <td> <input type="button" th:onclick="studentDel([(${sdto.id})],[(${ban})])" value="삭제">
+      </tr>
+    </table>
+  </section>
+</body>
+</html>

@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <title>학생관리 시스템</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Malgun Gothic', 'Dotum', sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+        }
+        
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+        
+        header {
+            width: 1100px;
+            height: 80px;
+            margin: auto;
+            background-color: #4a6f8a;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 0 0 10px 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        header h1 {
+            font-size: 24px;
+        }
+
+        nav {
+            width: 1100px;
+            height: 60px;
+            line-height: 60px;
+            margin: 15px auto;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        nav #main {
+            padding-left: 20px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        nav #main .menu {
+            list-style-type: none;
+            display: inline-block;
+            width: auto;
+            min-width: 110px;
+            height: 40px;
+            border: none;
+            border-radius: 5px;
+            background-color: #fff;
+            line-height: 40px;
+            text-align: center;
+            margin: 10px 5px;
+            position: relative;
+            padding: 0 15px;
+            font-weight: bold;
+            color: #345678;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        nav #main .menu:hover {
+            background-color: #f0f5fa;
+        }
+
+        nav #main .menu:last-child {
+            width: auto;
+            margin-right: 20px;
+            background-color: #f8f8f8;
+            border: 1px solid #eaeaea;
+        }
+
+        nav #main .menu .sub {
+            position: absolute;
+            left: 0;
+            top: 40px;
+            visibility: hidden;
+            width: 100%;
+            min-width: 110px;
+            z-index: 100;
+            border-radius: 5px;
+            overflow: hidden;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+        }
+
+        nav #main .menu .sub li {
+            list-style-type: none;
+            width: 100%;
+            height: 40px;
+            line-height: 40px;
+            border: none;
+            border-bottom: 1px solid #eee;
+            background: white;
+            font-weight: normal;
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
+        
+        nav #main .menu .sub li:hover {
+            background-color: #f0f5fa;
+        }
+
+        nav #main .menu .sub li:last-child {
+            border-bottom: none;
+        }
+        
+        nav #main .menu .sub li a {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        section {
+            width: 1100px;
+            min-height: 500px;
+            margin: 20px auto;
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        footer {
+            width: 1100px;
+            height: 100px;
+            margin: 20px auto;
+            background: #4a6f8a;
+            color: rgba(255,255,255,0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px 10px 0 0;
+            font-size: 14px;
+            box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+        }
+    </style>
+    <script>
+        function view(n) {
+            document.getElementsByClassName("sub")[n].style.visibility = "visible";
+        }
+        
+        function hide(n) {
+            document.getElementsByClassName("sub")[n].style.visibility = "hidden";
+        }
+        
+        window.onload=function() {
+        	var chk=new XMLHttpRequest();
+        	chk.onload=function() {
+        		// alert(chk.responseText);
+        		document.getElementById("cnt").innerText=chk.responseText;
+        	}
+        	chk.open("GET","../memo/cntMemo");
+        	chk.send();
+        }
+    </script>
+</head>
+<body>
+    <header>
+        <h1>학생관리 시스템</h1>
+    </header>
+
+    <nav>
+        <ul id="main">
+            <li class="menu" onmouseover="view(0)" onmouseout="hide(0)">성적관리
+                <ul class="sub">
+                    <li>1반</li>
+                    <li>2반</li>
+                    <li>3반</li>
+                </ul>
+            </li>
+            <li class="menu" onmouseover="view(1)" onmouseout="hide(1)">학생관리
+                <ul class="sub">
+		          <li th:if="${session.ban==1 || session.level==100}"> <a href="../student/studentList?ban=1"> 1반 </a> </li>
+		          <li th:if="${session.ban==2 || session.level==100}"> <a href="../student/studentList?ban=2"> 2반 </a> </li>
+		          <li th:if="${session.ban==3 || session.level==100}"> <a href="../student/studentList?ban=3"> 3반 </a> </li>
+		       	</ul>
+            </li>
+            <li class="menu" onmouseover="view(2)" onmouseout="hide(2)">커뮤니티
+                <ul class="sub">
+                    <li><a href="../comm/list?cla=1">공지사항</a></li>
+                    <li><a href="../comm/list?cla=2">게시판</a></li>
+                    <li><a href="../comm/list?cla=3">자료실</a></li>
+                </ul>
+            </li>
+            <li class="menu" th:if="${session.level>=80}"> <a href="../teacher/tlist">교직원관리</a></li>
+            <li class="menu" onmouseover="view(3)" onmouseout="hide(3)">메모확인 <span id="cnt"></span>
+          	    <ul class="sub">
+		          <li> <a href="../memo/send"> 보낸 메모 </a> </li>
+		          <li> <a href="../memo/receive"> 받은 메모 </a> </li>
+	       		</ul>
+            </li>
+            <li class="menu"><span th:text="${session.name+'님'}"></span> <a href="../main/logout">logout</a></li>
+        </ul>
+    </nav>
+
+    <section layout:fragment="content">
+        <!-- 여기에 페이지별 콘텐츠가 들어갑니다 -->
+    </section>
+
+    <footer>
+        <p>© 2025 학생관리 시스템 All Rights Reserved.</p>
+    </footer>
+</body>
+</html>

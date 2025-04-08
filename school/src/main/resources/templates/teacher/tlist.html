@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ko"
+xmlns:th="http://www.thymeleaf.org"
+xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+layout:decorate="/default">
+<head>
+<meta charset="UTF-8">
+<title>학생관리 시스템 - 교직원 목록</title>
+<style>
+  /* 전체 스타일 */
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Malgun Gothic', 'Dotum', sans-serif;
+  }
+  
+  body {
+    background-color: #f5f5f5;
+  }
+  
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
+  
+  /* 섹션 스타일 */
+  section {
+    width: 1100px;
+    min-height: 500px;
+    margin: 20px auto;
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  }
+  
+  /* 테이블 스타일 */
+  section table {
+    border-spacing: 0;
+    width: 800px;
+    border-collapse: collapse;
+    margin: 20px auto;
+  }
+  
+  section table caption h3 {
+    padding: 10px 0;
+    color: #4a6f8a;
+    font-size: 22px;
+    text-align: center;
+    margin-bottom: 15px;
+  }
+  
+  section table tr td {
+    height: 45px;
+    border-bottom: 1px solid #eeeeee;
+    padding: 8px 12px;
+    transition: background-color 0.2s;
+  }
+  
+  section table tr:hover {
+    background-color: #f8f8f8;
+  }
+  
+  section table tr:first-child {
+    background-color: #4a6f8a;
+    color: white;
+    font-weight: bold;
+  }
+  
+  section table tr:first-child td {
+    border-top: none;
+    height: 50px;
+  }
+  
+  section table tr:last-child td {
+    border-bottom: 2px solid #dddddd;
+  }
+  
+  /* 버튼 스타일 */
+  section table a {
+    display: inline-block;
+    background-color: #4a6f8a;
+    color: white;
+    padding: 8px 16px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    margin-top: 15px;
+    transition: background-color 0.3s;
+  }
+  
+  section table a:hover {
+    background-color: #345678;
+  }
+</style>
+</head>
+<body> <!-- tlist.html -->
+<section layout:fragment="content">
+  <table align="center">
+    <caption><h3>교직원 목록</h3></caption>
+    <tr align="center">
+      <td>아이디</td>
+      <td>이 름</td>
+      <td>담당반</td>
+      <td>레 벨</td>
+      <td>이메일</td>
+      <td>전화번호</td>
+    </tr>
+    
+    <tr th:each="tdto:${tlist}" align="center">
+      <td th:text="${tdto.userid}"></td>
+      <td th:text="${tdto.name}"></td>
+      <td th:if="${tdto.ban==0}">없음</td>
+      <td th:unless="${tdto.ban==0}" th:text="${tdto.ban}"></td>
+      <td th:text="${tdto.level}"></td>
+      <td th:text="${tdto.email}"></td>
+      <td th:text="${tdto.phone}"></td>
+    </tr>
+    
+    <tr>
+      <td colspan="7" align="center">
+        <a href="twrite">교직원 추가</a>
+      </td>
+    </tr>
+  </table>
+</section>
+</body>
+</html>

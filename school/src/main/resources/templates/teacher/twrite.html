@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ko"
+xmlns:th="http://www.thymeleaf.org"
+xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+layout:decorate="/default">
+<head>
+<meta charset="UTF-8">
+<title>학생관리 시스템 - 교직원 추가</title>
+<style>
+  /* 전체 스타일 */
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Malgun Gothic', 'Dotum', sans-serif;
+  }
+  
+  body {
+    background-color: #f5f5f5;
+  }
+  
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
+  
+  /* 섹션 스타일 */
+  section {
+    width: 1100px;
+    min-height: 500px;
+    margin: 20px auto;
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  }
+  
+  /* 테이블 스타일 */
+  section table {
+    border-spacing: 0;
+    width: 500px;
+    border-collapse: collapse;
+    margin: 20px auto;
+  }
+  
+  section table caption h3 {
+    padding: 10px 0;
+    color: #4a6f8a;
+    font-size: 22px;
+    text-align: center;
+    margin-bottom: 15px;
+  }
+  
+  section table tr td {
+    height: 50px;
+    border-bottom: 1px solid #eeeeee;
+    padding: 8px 12px;
+  }
+  
+  section table tr:first-child td {
+    border-top: 2px solid #dddddd;
+  }
+  
+  section table tr:last-child td {
+    border-bottom: 2px solid #dddddd;
+  }
+  
+  /* 폼 요소 스타일 */
+  section input[type=text] {
+    width: 300px;
+    height: 36px;
+    padding: 0 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    transition: border-color 0.3s;
+  }
+  
+  section input[type=text]:focus {
+    border-color: #4a6f8a;
+    outline: none;
+  }
+  
+  section input[type=submit] {
+    width: 300px;
+    height: 40px;
+    background-color: #4a6f8a;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  section input[type=submit]:hover {
+    background-color: #345678;
+  }
+  
+  section select {
+    width: 308px;
+    height: 36px;
+    padding: 0 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    background-color: white;
+  }
+  
+  /* 레이블 스타일 */
+  section table tr td:first-child {
+    width: 100px;
+    font-weight: bold;
+    color: #4a6f8a;
+  }
+</style>
+</head>
+<body> <!-- twrite.html -->
+<section layout:fragment="content">
+  <form method="post" action="twriteOk">
+    <table align="center">
+      <caption><h3>교직원 추가</h3></caption>
+      <tr>
+        <td>아이디</td>
+        <td><input type="text" name="userid"></td>
+      </tr>
+      <tr>
+        <td>비밀번호</td>
+        <td><input type="text" name="pwd"></td>
+      </tr>
+      <tr>
+        <td>이 름</td>
+        <td><input type="text" name="name"></td>
+      </tr>
+      <tr>
+        <td>이메일</td>
+        <td><input type="text" name="email"></td>
+      </tr>
+      <tr>
+        <td>전 화</td>
+        <td><input type="text" name="phone"></td>
+      </tr>
+      <tr>
+        <td>반</td>
+        <td>
+          <select name="ban">
+            <option value="0">반없음</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+          </select>
+        </td>
+      </tr>
+      <tr>
+        <td>레 벨</td>
+        <td>
+          <select name="level">
+            <option value="10">10</option>
+            <option value="30">30</option>
+            <option value="50">50</option>
+            <option value="80">80</option>
+            <option value="100">100</option>
+          </select>
+        </td>
+      </tr>
+      <tr align="center">
+        <td colspan="2"><input type="submit" value="등록"></td>
+      </tr>
+    </table>
+  </form>
+</section>
+</body>
+</html>

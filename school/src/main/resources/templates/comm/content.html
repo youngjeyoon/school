@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="/default">
+<head>
+    <meta charset="UTF-8">
+    <title>내용 보기</title>
+    <style>
+        section {
+            width: 1100px;
+            min-height: 600px;
+            margin: auto;
+            padding: 20px;
+        }
+        
+        table {
+            width: 900px;
+            border-collapse: collapse;
+            margin: 20px auto;
+            background-color: white;
+            box-shadow: 0 1px 5px rgba(0,0,0,0.1);
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        
+        caption {
+            margin-bottom: 20px;
+        }
+        
+        caption h3 {
+            font-size: 24px;
+            color: #345678;
+            margin: 0;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #eaeaea;
+        }
+        
+        table tr {
+            border-bottom: 1px solid #eaeaea;
+        }
+        
+        table tr:last-child {
+            border-bottom: none;
+        }
+        
+        table td {
+            padding: 15px;
+        }
+        
+        table tr td:first-child {
+            width: 120px;
+            background-color: #f2f6f9;
+            color: #345678;
+            font-weight: bold;
+            text-align: center;
+            border-right: 1px solid #eaeaea;
+        }
+        
+        table tr td:last-child {
+            padding-left: 20px;
+        }
+        
+        /* For the content cell - give it more space */
+        table tr:nth-last-child(2) td:last-child {
+            min-height: 200px;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        
+        .btn {
+            display: inline-block;
+            background-color: #4a6f8a;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 4px;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+            margin: 0 5px;
+        }
+        
+        .btn:hover {
+            background-color: #345678;
+        }
+        
+        .btn-danger {
+            background-color: #d9534f;
+        }
+        
+        .btn-danger:hover {
+            background-color: #c9302c;
+        }
+        
+        .btn-primary {
+            background-color: #5bc0de;
+        }
+        
+        .btn-primary:hover {
+            background-color: #46b8da;
+        }
+        
+        table tr:last-child td {
+            padding: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<section layout:fragment="content">
+    <table>
+        <caption><h3>내용 보기</h3></caption>
+        <tr>
+            <td>제목</td>
+            <td th:text="${cdto.title}"></td>
+        </tr>
+        <tr>
+            <td>작성자</td>
+            <td th:text="${cdto.userid}"></td>
+        </tr>
+        <tr>
+            <td>조회수</td>
+            <td th:text="${cdto.readnum}"></td>
+        </tr>
+        <tr>
+            <td>작성일</td>
+            <td th:text="${cdto.writeday}"></td>
+        </tr>
+        <tr th:if="${cdto.cla==3}">
+            <td>파일</td>
+            <td th:text="${cdto.ofname}"></td>
+        </tr>
+        <tr>
+            <td>내용</td>
+            <td th:utext="${cdto.content}"></td>
+        </tr>
+        <tr>
+            <td colspan="2" align="center">
+                <a class="btn" th:href="@{list(cla=${cdto.cla},page=${page})}">목록</a>
+                <th:block th:if="${session.userid==cdto.userid || session.level>=80}">
+                    <a class="btn btn-primary" th:href="@{update(id=${cdto.id},page=${page})}">수정</a>
+                    <a class="btn btn-danger" th:href="@{delete(id=${cdto.id},page=${page},cla=${cdto.cla})}">삭제</a>
+                </th:block>
+            </td>
+        </tr>
+    </table>
+</section>
+</body>
+</html>

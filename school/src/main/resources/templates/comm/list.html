@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="/default">
+<head>
+    <meta charset="UTF-8">
+    <title>게시판</title>
+    <style>
+        section {
+            width: 1100px;
+            min-height: 600px;
+            margin: auto;
+            padding: 20px;
+        }
+        
+        h3 {
+            font-size: 24px;
+            color: #345678;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #eaeaea;
+        }
+        
+        table {
+            width: 900px;
+            border-collapse: collapse;
+            margin: 20px auto;
+            background-color: white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        table tr:first-child {
+            background-color: #f2f6f9;
+            color: #345678;
+            font-weight: bold;
+            height: 50px;
+        }
+        
+        table tr {
+            border-bottom: 1px solid #eaeaea;
+            height: 45px;
+        }
+        
+        table tr:hover:not(:first-child):not(:last-child) {
+            background-color: #f8f8f8;
+        }
+        
+        table td {
+            padding: 10px;
+        }
+        
+        table td a {
+            color: #345678;
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+        
+        table td a:hover {
+            color: #5a8bc2;
+            text-decoration: underline;
+        }
+        
+        .write-btn {
+            display: inline-block;
+            background-color: #4a6f8a;
+            color: white !important;
+            padding: 8px 16px;
+            border-radius: 4px;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+        
+        .write-btn:hover {
+            background-color: #345678;
+            text-decoration: none !important;
+        }
+        
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        
+        .pagination a {
+            display: inline-block;
+            padding: 5px 10px;
+            margin: 0 3px;
+            border: 1px solid #ddd;
+            color: #555;
+            text-decoration: none;
+            border-radius: 3px;
+        }
+        
+        .pagination a:hover, .pagination a.active {
+            background-color: #4a6f8a;
+            color: white;
+            border-color: #4a6f8a;
+        }
+    </style>
+</head>
+<body>
+<section layout:fragment="content">
+    <h3 align="center" th:if="${cla=='1'}">공지사항</h3>
+    <h3 align="center" th:if="${cla=='2'}">게시판</h3>
+    <h3 align="center" th:if="${cla=='3'}">자료실</h3>
+
+    <table>
+        <tr>
+            <td width="50%">제목</td>
+            <td width="15%">작성자</td>
+            <td width="10%">조회수</td>
+            <td width="25%">작성일</td>
+        </tr>
+
+        <tr th:each="cdto:${clist}" align="center">
+            <td align="left">
+                <a th:href="@{readnum(id=${cdto.id},page=${page})}" th:text="${cdto.title}"></a>
+            </td>
+            <td th:text="${cdto.userid}"></td>
+            <td th:text="${cdto.readnum}"></td>
+            <td th:text="${cdto.writeday}"></td>
+        </tr>
+
+        <tr>
+            <td colspan="3" align="center">
+                <div class="pagination">
+                    <!-- 페이지네이션 링크가 여기에 추가될 수 있습니다 -->
+                </div>
+            </td>
+            <td align="center">
+                <a th:href="@{write(cla=${cla})}" th:if="${cla!='1' || session.level>=80}" class="write-btn">글쓰기</a>
+            </td>
+        </tr>
+    </table>
+</section>
+</body>
+</html>
